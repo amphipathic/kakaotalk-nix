@@ -7,8 +7,9 @@
 , makeDesktopIcon
 , copyDesktopItems
 , copyDesktopIcons 
-}:
-mkWindowsApp rec {
+}: let
+  defaultSettings = ./pref.ini;
+in mkWindowsApp rec {
   inherit wine; 
 
   pname = "kakaotalk";
@@ -35,6 +36,7 @@ mkWindowsApp rec {
     cp ${font}/* "$WINEPREFIX/drive_c/windows/Fonts"
 
     wine ${src} /S 
+    cp ${defaultSettings} "$WINEPREFIX/drive_c/users/$USER/AppData/Local/Kakao/KakaoTalk/pref.ini"
     wineserver -w 
   '';
 
