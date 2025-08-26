@@ -1,6 +1,7 @@
 { lib
 , wine
 , fetchurl
+, fetchzip
 , mkWindowsApp
 , makeDesktopItem 
 , makeDesktopIcon
@@ -18,6 +19,12 @@ mkWindowsApp rec {
     hash = "sha256-S1N3elSf8m+cQnkeZSTkf/TwosYIcisUBKMhDXrqPEU=";
   };
 
+  font = fetchzip {
+    url = "https://hangeul.naver.com/hangeul_static/webfont/zips/nanum-gothic.zip";
+    downloadToTemp = true;
+    hash = "sha256-dnwxiR6OtcV2PsWzSmCz2Of8Y1gPunFCBd8bjFdoSo8=";
+  };
+
   enableMonoBootPrompt = false;
   dontUnpack = true;
   wineArch = "win64";
@@ -25,6 +32,8 @@ mkWindowsApp rec {
   nativeBuildInputs = [ copyDesktopItems copyDesktopIcons ];
 
   winAppInstall = ''
+    cp ${font}/* "$WINEPREFIX/drive_c/windows/Fonts"
+
     wine ${src} /S 
     wineserver -w 
   '';
